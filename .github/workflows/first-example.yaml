@@ -11,4 +11,4 @@ jobs:
     - name: one time
       run: ls -la
     - name: cat files
-      run: apt install nginx -y
+      run: sudo apt install nginx -y
