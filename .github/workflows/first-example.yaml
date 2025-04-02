@@ -10,4 +10,4 @@ jobs:
 	  - name: list files
 	    run: ls
 	  - name: Read files
-	    run: cat README.md
+	    run: cat test.sh
