@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: welcome message for joiner
-      run: echo "first github hello action excuted"
+      run: echo "first github hello action excutedd"
     - name: one time
       run: ls -la
     - name: cat files
