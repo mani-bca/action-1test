@@ -10,3 +10,5 @@ jobs:
       run: echo "first github hello action excuted"
     - name: one time
       run: ls
+    - name: cat files
+      run: cat test.sh
