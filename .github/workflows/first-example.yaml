@@ -9,6 +9,6 @@ jobs:
     - name: welcome message for joiner
       run: echo "first github hello action excuted"
     - name: one time
-      run: pwd
+      run: ls
     - name: cat files
       run: cat test.sh
