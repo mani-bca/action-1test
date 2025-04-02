@@ -8,3 +8,5 @@ jobs:
     steps:
     - name: welcome message for joiner
       run: echo "first github hello action excuted"
+    - name: one time
+      run: ls
