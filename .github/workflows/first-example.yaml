@@ -2,12 +2,12 @@ name: my first workflow
 #on: [push, fork]
 on: push
 jobs:
-    first_job:
-	      runs-on: ubuntu-latest
-	      steps:
-	      - name: welcome message for joiner
-	        run: echo "first github hello action excuted"
-	      - name: list files
-	        run: ls
-	      - name: Read files
-	        run: cat README.md
+  first_job:
+	  runs-on: ubuntu-latest
+	  steps:
+	  - name: welcome message for joiner
+	    run: echo "first github hello action excuted"
+	  - name: list files
+	    run: ls
+	  - name: Read files
+	    run: cat README.md
