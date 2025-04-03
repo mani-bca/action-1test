@@ -6,6 +6,8 @@ jobs:
   first_job:
     runs-on: ubuntu-latest
     steps:
+    - name: checkout repo
+      uses: actions/checkoout@v4
     - name: welcome message for joiner
       run: echo "first github hello action excutedd"
     - name: one time

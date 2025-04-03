@@ -1,0 +1,17 @@
+name: core concept
+on: [push, pull_request]
+jobs:
+  unit-testing:
+    name: unit testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: install nodeJS
+        with:
+          node-version: 20
+          
+      - name: install dependencies
+        run: npm install
+      - name: run unit tests
+        run: npm test
