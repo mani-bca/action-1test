@@ -10,7 +10,14 @@ jobs:
       uses: actions/checkout@v4
     - name: welcome message for joiner
       run: echo "first github hello action excuted"
+
+    - name: multiline steps execute
+      run: |
+        echo "multiline commands"
+        pwd
+        cat README.md
+
     - name: one time
       run: ls -la
-    - name: cat files
-      run: sudo apt install nginx -y
+    - name: generate ascii artwork
+      run: cowsay -f dragon "run for cover, iam a dragon...rawr" >> dragon.txt
