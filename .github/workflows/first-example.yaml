@@ -19,3 +19,17 @@ jobs:
 
     - name: one time
       run: ls -la
+
+  second_job:
+    needs: first_job
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Random job step
+      run: echo "This is a random job step"
+
+    - name: Second job step
+      run: echo "Second job executed after first job success"
+
