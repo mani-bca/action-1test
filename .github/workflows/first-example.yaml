@@ -1,5 +1,7 @@
 name: My First Workflow
-
+# on:
+#   schedule:
+#     - cron: '*/15 0 * * *'
 on:
   push:
     branches: [ "main" ]
