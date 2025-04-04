@@ -19,5 +19,3 @@ jobs:
 
     - name: one time
       run: ls -la
-    - name: generate ascii artwork
-      run: cowsay -f dragon "run for cover, iam a dragon...rawr" >> dragon.txt
