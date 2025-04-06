@@ -1,23 +1,73 @@
-name: my first workflow
-#on: [push, fork]
-on: push
+name: My First Workflow
+# on:
+#   schedule:
+#     - cron: '*/15 0 * * *'
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - .github/workflows/ci.yml
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   first_job:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout repo
-      uses: actions/checkout@v4
-    - name: welcome message for joiner
-      run: echo "first github hello action excuted"
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-    - name: multiline steps execute
+    - name: Welcome message for joiner
+      run: echo "First GitHub hello action executed"
+
+    - name: Multiline steps execute
       run: |
-        echo "multiline commands"
+        echo "Multiline commands"
         pwd
         cat README.md
 
-    - name: one time
+    - name: One time
       run: ls -la
-    - name: generate ascii artwork
-      run: cowsay -f dragon "run for cover, iam a dragon...rawr" >> dragon.txt
+
+    - name: Create artifact directory
+      run: mkdir -p artifacts
+
+    - name: Save artifact
+      run: echo "This is a sample artifact" > artifacts/sample.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sample-artifact
+        path: artifacts/
+
+  second_job:
+    needs: first_job
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: sample-artifact
+        path: artifacts/
+
+    - name: List downloaded artifact
+      run: ls -la artifacts/
+
+    - name: Random job step
+      run: echo "This is a random job step"
+
+    - name: Second job step
+      run: echo "Second job executed after first job success"
+
+# raise a PR 
