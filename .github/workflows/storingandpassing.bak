@@ -1,0 +1,48 @@
+name: storing data and passing data
+
+on:
+    push
+
+jobs:
+    build_job_1:
+        runs-on: ubuntu-latest
+        steps:
+            - name: install cowsay progrm
+              run: sudo apt-get install cowsay -y
+
+            - name: execute cowsay command
+              run: cowsay -f dragon "run for cover,  iam a dragon... rawwr" >> dragon.txt
+
+            - name: uplaod artifact dragon file
+              uses: actions/upload-artifact@v4
+              with:
+                name: dragon-text-file
+                path: dragon.txt
+        
+    test_job_2:
+        runs-on: ubuntu-latest
+        steps:
+            - name: download the dragon file
+              uses: actions/download-artifact@v4
+              with:
+                name: dragon-text-file
+
+            - name: test file exist
+              run: grep -i "dragon" dragon.txt
+
+            - name: lsit file
+              run: ls
+
+    deploy_job_3:
+        runs-on: ubuntu-latest
+        steps:
+            - name: download the dragon file
+              uses: actions/download-artifact@v4
+              with:
+                name: dragon-text-file
+
+            - name: read dragon file 
+              run: cat dragon.txt
+
+            - name: deploy the artifcat
+              run: echo "deploying the artifact into server"
