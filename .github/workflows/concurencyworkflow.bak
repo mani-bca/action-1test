@@ -1,0 +1,43 @@
+name: multijob with passing data
+# concurrency:
+#   group: production
+#   cancel-in-progress: true
+#this workflow will cancel the existing workflow if we trigger multiple times because of concurrency
+# if you set concurrency cancel-in-progress to false, it will not cancel the existing workflow but keep in the progress
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+    build_job_1:
+        runs-on: ubuntu-latest
+        steps:
+            - name: install cowsay progrm
+              run: sudo apt-get install cowsay -y
+
+            - name: execute cowsay command
+              run: cowsay -f dragon "run for cover,  iam a dragon... rawwr" >> dragon.txt
+
+            - name: sleep for 30 seconds
+              run: sleep 30
+        
+    deploy_job_3:
+        timeout-minutes: 10
+        #this will timeout the job after 10 minute for each steps inside the job
+        concurrency:
+          group: production
+          cancel-in-progress: true
+        runs-on: ubuntu-latest
+        steps:
+            - name: install cowsay progrm
+              run: sudo apt-get install cowsay -y
+
+            - name: execute cowsay command
+              run: cowsay -f dragon "run for cover,  iam a dragon... rawwr" >> dragon.txt
+
+            - name: sleep for 30 seconds
+              timeout-minutes: 10
+              # this will timeout the job after 10 minute
+              run: sleep 30

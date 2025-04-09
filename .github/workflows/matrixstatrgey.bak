@@ -1,0 +1,38 @@
+name: core concept
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+# the workflow will will run 6 jobs parallelly and one job failed then the other jobs will be cancelled and 
+#workflow will be marked as failed
+
+# using variables we can by pass the failed job and run the other jobs (exclude)
+jobs:
+  unit-testing:
+    strategy:
+      fail-fast: false
+      # fail-fast will not cancel the other jobs if one job failed
+      max-parallel: 2
+  # max parallel will run the jobs in parallel and again run the remaining jobs
+      matrix:
+        os: [ubuntu-latest, windows-latest, ubuntu-22.04]
+        image: [hello-world, alpine]
+        exclude:
+          - images: alpine
+            os: windows-latest
+          # exclude will run the job on all the os and image except the specified os and image
+          # for example if you want to run the job on all the os and image except windows-latest and alpine
+        include:
+          - images: amd64/alpine
+            os: ubuntu-20.04
+          # include will run the job only on the specified os and image
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Docker echo details
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          docker info
+      - name: Run images on ${{ matrix.os }}
+        run: docker run ${{ matrix.image }}
+        
