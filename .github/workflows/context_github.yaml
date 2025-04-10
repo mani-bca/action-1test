@@ -1,0 +1,46 @@
+name: GitHub Actions context
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment'
+        required: true
+        default: 'dev'
+ 
+env:
+  GLOBAL_VAR: 'This is a global env variable'
+ 
+jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [14, 16]
+    steps:
+      - name: Print Node version
+        run: echo "Node version is ${{ matrix.node }}"
+ 
+  job-one:
+    runs-on: ubuntu-latest
+    outputs:
+      custom_output: ${{ steps.set-output.outputs.result }}
+    steps:
+      - name: Step with ID
+        id: set-output
+        run: |
+          echo "result=Hello from Job One" >> $GITHUB_OUTPUT
+ 
+  job-two:
+    needs: job-one
+    runs-on: ubuntu-latest
+    env:
+      MY_VAR: 'Value inside job-two'
+    steps:
+      - name: Access Output from job-one
+        run: echo "Output from job-one: ${{ needs.job-one.outputs.custom_output }}"
+ 
+      - name: Access Secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: echo "Secret value is $MY_SECRET"
+ 
