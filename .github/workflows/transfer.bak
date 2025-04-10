@@ -100,3 +100,23 @@ logs/
 - You can enhance `task2` to actually build and test code or deploy artifacts.
 - The current setup simulates failures on purpose for educational/demo purposes.
 - Secrets/vars must be defined under GitHub Environment settings.
+
+
+🔷 on.workflow_dispatch.inputs.branch-name
+Accepts a string input from the user (e.g., feature-login).
+
+This simulates a dynamic use case like checking branch naming conventions.
+
+🔷 startsWith(github.event.inputs.branch-name, 'feature')
+Checks if the input starts with the word feature.
+
+✅ Prints the step if true.
+
+🔷 endsWith(github.event.inputs.branch-name, 'login')
+Checks if the input ends with the word login.
+
+✅ Prints the step if true.
+
+🔷 if: !startsWith(...) && !endsWith(...)
+Prints a fallback message when neither condition matches.
+
