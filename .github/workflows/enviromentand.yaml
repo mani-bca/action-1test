@@ -16,10 +16,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Echo Environment Vars
-        run: echo "Env variable is: ${{ vars.AWS_PROFILE }}"
+        run: echo "Env variable is ${{ vars.AWS_PROFILE }}"
       
       - name: Echo Environment Secrets
-        run: echo "Env secret is: ${{ secrets.AWS_ACCESS_KEY }}"
+        run: echo "Env secret is ${{ secrets.AWS_ACCESS_KEY }}"
 
   task2:
     runs-on: ubuntu-latest
