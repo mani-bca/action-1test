@@ -64,12 +64,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - name: Check if input starts with "feature"
+      - name: Check if input starts with "main"
         if: startsWith(github.event.inputs.branch-name, 'main')
-        run: echo "Branch name starts with 'feature'"  
+        run: echo "Branch name starts with 'main'"  
       - name: Check if input ends with "login"
-        if: endsWith(github.event.inputs.branch-name, 'feature')
+        if: endsWith(github.event.inputs.branch-name, 'main')
         run: echo "Branch name ends with 'login'"  
       - name: Fallback - no match
         if: ${{ !startsWith(github.event.inputs.branch-name, 'main') && !endsWith(github.event.inputs.branch-name, 'login') }}
-        run: echo "Branch name does not start with 'feature' or end with 'login'"
+        run: echo "Branch name does not start with 'main' or end with 'login'"
