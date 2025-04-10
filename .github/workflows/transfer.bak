@@ -17,3 +17,27 @@ jobs:
    - name: echo secrets
      run:  |
       echo "Env secrets is: ${{secrets.API_KEY}}"
+
+name: functions workflow
+
+on:
+ push:
+ workflow_dispatch:
+jobs:
+ echo-functions:
+  runs-on: ubuntu-latest
+  steps:
+   - name: Failing step
+     run: exit 0
+   - name: I will be skipped
+     if: ${{success()}}
+     run: echo "I will print if previous step is succeeded"
+   - name: I will be success
+     if: ${{failure()}}
+     run: echo "I will print if first step is failed"
+   - name: I will be cancelled
+     if: ${{cancelled()}}
+     run: echo "I will print if the workflow cancelled"
+   - name: I will be not cancelled
+     if: ${{!cancelled()}}
+     run: echo "I will always print"
