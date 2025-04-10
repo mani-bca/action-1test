@@ -7,6 +7,10 @@ on:
         description: "Choose environment"
         type: environment
         default: dev
+      branch-name:
+        description: "Enter a branch name"
+        required: true
+   
 #   push:
 
 jobs:
@@ -55,3 +59,17 @@ jobs:
         run: |
           echo "Job completed at: $(date)" >> audit.log
           cat audit.log
+    
+  task3:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Check if input starts with "feature"
+        if: startsWith(github.event.inputs.branch-name, 'main')
+        run: echo "Branch name starts with 'feature'"  
+      - name: Check if input ends with "login"
+        if: endsWith(github.event.inputs.branch-name, 'feature')
+        run: echo "Branch name ends with 'login'"  
+      - name: Fallback - no match
+        if: ${{ !startsWith(github.event.inputs.branch-name, 'main') && !endsWith(github.event.inputs.branch-name, 'login') }}
+        run: echo "Branch name does not start with 'feature' or end with 'login'"
