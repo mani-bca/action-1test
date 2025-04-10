@@ -15,20 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14, 16]
+        node: [14]
     steps:
       - name: Print Node version
         run: echo "Node version is ${{ matrix.node }}"
  
-#   job-one:
-#     runs-on: ubuntu-latest
-#     outputs:
-#       custom_output: ${{ steps.set-output.outputs.result }}
-#     steps:
-#       - name: Step with ID
-#         id: set-output
-#         run: |
-#           echo "result=Hello from Job One" >> $GITHUB_OUTPUT
+  job-one:
+    runs-on: ubuntu-latest
+    # job level output variable name custom_output to be used in job-two
+    outputs:
+      custom_output: ${{ steps.set-output.outputs.result }}
+    steps:
+      - name: Step with ID
+        id: set-output
+        run: |
+          echo "result=Hello from Job One" >> $GITHUB_OUTPUT
  
 #   job-two:
 #     needs: job-one
