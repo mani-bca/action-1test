@@ -1,43 +1,102 @@
-name : Environment
 
+# 📄 GitHub Actions Workflow: Environment and Functions Workflow
+
+## 🔧 Overview
+
+This workflow handles two core tasks:
+
+- **`task1`**: Echoes environment-level variables and secrets based on user input from workflow dispatch.
+- **`task2`**: Simulates a CI build process with real-world condition-based logic using `success()`, `failure()`, and `cancelled()` functions.
+
+---
+
+## 🚀 Trigger
+
+```yaml
 on:
- workflow_dispatch:
-  inputs:
-   target-env:
-    type: environment
-    default: staging
-jobs:
- echo:
-  runs-on: ubuntu-latest
-  environment: ${{inputs.target-env}}
-  steps:
-   - name: echo vars
-     run: |
-      echo "Env variables is: ${{vars.TARGET_VAR}}"
-   - name: echo secrets
-     run:  |
-      echo "Env secrets is: ${{secrets.API_KEY}}"
+  workflow_dispatch:
+    inputs:
+      target-env:
+        description: "Choose environment"
+        type: environment
+        default: dev
+#   push:
+```
 
-name: functions workflow
+- This workflow is **manually triggered** using the **"Run workflow"** button on GitHub.
+- An environment (`dev`, `staging`, `uat`, etc.) must be selected during dispatch.
 
-on:
- push:
- workflow_dispatch:
-jobs:
- echo-functions:
-  runs-on: ubuntu-latest
-  steps:
-   - name: Failing step
-     run: exit 0
-   - name: I will be skipped
-     if: ${{success()}}
-     run: echo "I will print if previous step is succeeded"
-   - name: I will be success
-     if: ${{failure()}}
-     run: echo "I will print if first step is failed"
-   - name: I will be cancelled
-     if: ${{cancelled()}}
-     run: echo "I will print if the workflow cancelled"
-   - name: I will be not cancelled
-     if: ${{!cancelled()}}
-     run: echo "I will always print"
+---
+
+## 🧱 Job Breakdown
+
+### 🧪 `task1`: Environment Variable and Secret Echo
+
+**Conditions:**  
+- Runs **only** on `workflow_dispatch` event.
+
+**What it does:**  
+- Sets the job environment using `${{ github.event.inputs.target-env }}` or defaults to `'uat'` if not specified.
+- Echoes environment-scoped variable (`vars.AWS_PROFILE`) and secret (`secrets.AWS_ACCESS_KEY`).
+
+```yaml
+environment: ${{ github.event.inputs.target-env || 'uat' }}
+```
+
+**Use Case:**  
+This is useful for validating if the environment context (and its associated variables/secrets) is correctly attached during manual trigger runs.
+
+---
+
+### 🛠️ `task2`: Simulated CI Build with Conditional Steps
+
+**Conditions:**  
+- Runs on **manual (`workflow_dispatch`) or automatic (`push`)** events.
+
+**What it does:**  
+1. **Simulates a build failure.**
+2. Based on the build result:
+   - If **success** → Create a success artifact.
+   - If **failure** → Log the failure reason.
+   - If **cancelled** → Clean up temporary resources.
+   - If **not cancelled** → Log final audit timestamp.
+
+---
+
+## 🧪 Step-by-Step Logic
+
+| Step                     | Condition              | Description                                          |
+|--------------------------|------------------------|------------------------------------------------------|
+| `Simulated build step`   | Always                 | Fails intentionally with `exit 1`.                   |
+| `Create success artifact`| `if: success()`        | Runs only if build step succeeded. Saves a status.   |
+| `Log failure reason`     | `if: failure()`        | Runs only if build step failed. Saves error log.     |
+| `Cleanup on cancel`      | `if: cancelled()`      | Cleans up temp data if the workflow was cancelled.   |
+| `Final audit timestamp`  | `if: !cancelled()`     | Runs unless workflow was cancelled. Logs timestamp.  |
+
+---
+
+## ✅ Benefits of This Setup
+
+- **Environment-aware**: Pulls correct secrets and vars based on selected target environment.
+- **Clear debugging**: Uses build logic to demonstrate conditional behaviors (failure, cancel, etc.).
+- **Reusable template**: Acts as a great starting point for production workflows (CI/CD, testing, infra validation).
+
+---
+
+## 📁 Recommended Folder Structure
+
+```
+.github/
+└── workflows/
+    └── environment-and-functions.yml
+artifacts/
+logs/
+```
+
+---
+
+## 📌 Notes
+
+- You can enhance `task2` to actually build and test code or deploy artifacts.
+- The current setup simulates failures on purpose for educational/demo purposes.
+- Secrets/vars must be defined under GitHub Environment settings.
