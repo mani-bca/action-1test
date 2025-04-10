@@ -36,16 +36,16 @@ jobs:
         run: echo "Workflow input is ${{ github.event.inputs.environment }}"
 
  
-#   job-two:
-#     needs: job-one
-#     runs-on: ubuntu-latest
-#     env:
-#       MY_VAR: 'Value inside job-two'
-#     steps:
-#       - name: Access Output from job-one
-#         run: echo "Output from job-one: ${{ needs.job-one.outputs.custom_output }}"
-#       - name: Access Secret
-#         env:
-#           MY_SECRET: ${{ secrets.MY_SECRET }}
-#         run: echo "Secret value is $MY_SECRET"
+  job-two:
+    needs: job-one
+    runs-on: ubuntu-latest
+    env:
+      MY_VAR: 'Value inside job-two'
+    steps:
+      - name: Access Output from job-one
+        run: echo "Output from job-one ${{ needs.job-one.outputs.custom_output }}"
+      - name: Access Secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: echo "Secret value is $MY_SECRET"
  
