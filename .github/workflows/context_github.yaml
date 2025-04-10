@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14]
+        node: [14, 16]
     steps:
       - name: Print Node version
         run: echo "Node version is ${{ matrix.node }}"
