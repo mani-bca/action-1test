@@ -1,0 +1,57 @@
+name: Environment and Functions Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      target-env:
+        description: "Choose environment"
+        type: environment
+        default: dev
+#   push:
+
+jobs:
+  task1:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.target-env || 'uat' }}
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Echo Environment Vars
+        run: echo "Env variable is: ${{ vars.AWS_PROFILE }}"
+      
+      - name: Echo Environment Secrets
+        run: echo "Env secret is: ${{ secrets.AWS_ACCESS_KEY }}"
+
+  task2:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Simulated build step (failing)
+        run: |
+          echo "Starting build"
+          exit 1
+
+      - name: Create success artifact
+        if: ${{ success() }}
+        run: |
+          echo "Build output: SUCCESS" > build-status.txt
+          mkdir -p artifacts && mv build-status.txt artifacts/
+          echo "Build succeeded. Artifact saved."
+
+      - name: Log failure reason
+        if: ${{ failure() }}
+        run: |
+          echo "Build failed due to unknown error." > failure.log
+          mkdir -p logs && mv failure.log logs/
+          echo "Failure logged to logs/failure.log"
+
+      - name: Cleanup on cancel
+        if: ${{ cancelled() }}
+        run: |
+          echo "Workflow was cancelled. Cleaning up..."
+          rm -rf temp_env/ || echo "No temp env found to clean"
+
+      - name: Final audit timestamp
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Job completed at: $(date)" >> audit.log
+          cat audit.log
