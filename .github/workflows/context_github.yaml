@@ -39,13 +39,13 @@ jobs:
   job-two:
     needs: job-one
     runs-on: ubuntu-latest
-    env:
-      MY_VAR: 'Value inside job-two'
+    # env:
+    #   MY_VAR: 'Value inside job-two'
     steps:
       - name: Access Output from job-one
         run: echo "Output from job-one ${{ needs.job-one.outputs.custom_output }}"
       - name: Access Secret
-        env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
-        run: echo "Secret value is $MY_SECRET"
+        # env:
+        #   aws_access: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        run: echo "Secret value is ${{ secrets.AWS_ACCESS_KEY_ID }}"
  
