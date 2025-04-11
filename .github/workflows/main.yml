@@ -1,0 +1,41 @@
+name: Main Workflow
+
+on:
+  push:
+    branches-ignore:
+      - feature-1
+      - feature-2
+      - release04112025
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        default: dev
+      run_tests:
+        description: 'Run tests?'
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  call-reusable:
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/reusable.yml
+    with:
+      environment: ${{ github.event.inputs.environment || 'dev' }}
+      run_tests: ${{ github.event.inputs.run_tests || true }}
+    secrets: inherit
+    outputs:
+      result: ${{ steps.set_output.outputs.result }}
+
+  consume-output:
+    needs: call-reusable
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output from reusable
+        run: echo "Reusable output was ${{ needs.call-reusable.outputs.result }}"
