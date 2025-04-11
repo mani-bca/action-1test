@@ -6,7 +6,8 @@ on:
 permissions:
     issues: write
     pull-requests: write
-    contents: read
+    contents: write      
+    id-token: write 
 
 jobs:
     create-issue:
