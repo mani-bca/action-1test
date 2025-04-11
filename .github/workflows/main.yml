@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call reusable workflow
-        uses: ./.github/workflows/reusable.yml
+        uses: mani-bca/action-1test./.github/workflows/reusable.yml@main
         with:
           environment: ${{ github.event.inputs.environment || 'dev' }}
           # run_tests: ${{ github.event.inputs.run_tests || true }}
