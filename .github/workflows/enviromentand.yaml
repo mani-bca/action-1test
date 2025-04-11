@@ -68,7 +68,7 @@ jobs:
         if: startsWith(github.event.inputs.branch-name, 'main')
         run: echo "Branch name starts with 'main'"  
       - name: Check if input ends with "login"
-        if: endsWith(github.event.inputs.branch-name, 'main')
+        if: endsWith(github.event.inputs.branch-name, 'login')
         run: echo "Branch name ends with 'login'"  
       - name: Fallback - no match
         if: ${{ !startsWith(github.event.inputs.branch-name, 'main') && !endsWith(github.event.inputs.branch-name, 'login') }}
