@@ -11,18 +11,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Create an issue
-              uses: actions/github-script@v6
-              with:
-                    script: |
-                        const issueTitle = "Automated Issue Title";
-                        const issueBody = "This issue was created automatically by a GitHub Actions workflow.";
-                        
-                        await github.rest.issues.create({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            title: issueTitle,
-                            body: issueBody,
-                        });
+              run: |
+                gh issue create --title "Automated Issue Title" --body "This issue was created automatically by a GitHub Actions workflow."
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: echo the success message
               if: success() && github.event_name == 'workflow_dispatch'
               run: echo "Issue created successfully!"
