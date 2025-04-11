@@ -1,0 +1,74 @@
+name: My First Workflow
+# on:
+#   schedule:
+#     - cron: '*/15 0 * * *'
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - .github/workflows/ci.yml
+
+on:
+  push:
+    branches-ignore:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'releases/**'
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Welcome message for joiner
+      run: echo "First GitHub hello action executed"
+
+    - name: Multiline steps execute
+      run: |
+        echo "Multiline commands"
+        pwd
+        cat README.md
+
+    - name: One time
+      run: ls -la
+
+    - name: Create artifact directory
+      run: mkdir -p artifacts
+
+    - name: Save artifact
+      run: echo "This is a sample artifact" > artifacts/sample.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sample-artifact
+        path: artifacts/
+
+  second_job:
+    needs: first_job
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: sample-artifact
+        path: artifacts/
+
+    - name: List downloaded artifact
+      run: ls -la artifacts/
+
+    - name: Random job step
+      run: echo "This is a random job step"
+
+    - name: Second job step
+      run: echo "Second job executed after first job success"
+
+# raise a PR 
