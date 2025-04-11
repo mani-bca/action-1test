@@ -11,7 +11,7 @@ on:
       environment:
         description: 'Environment'
         required: true
-        default: dev
+        default: uat
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,7 +21,7 @@ jobs:
   call-reusable:
     uses: ./.github/workflows/reusable.yml
     with:
-      environment: ${{ github.event.inputs.environment || 'dev' }}
+      environment: ${{ github.event.inputs.environment || 'uat' }}
 
   consume-output:
     needs: call-reusable
