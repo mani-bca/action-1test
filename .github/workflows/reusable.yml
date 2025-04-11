@@ -27,8 +27,6 @@ jobs:
         id: set_output
         run: echo "result=success-from-reusable" >> $GITHUB_OUTPUT
 
-      - name: Set output (alternate v2 style)
-        id: alt_output
-        run: |
-          RESULT_VAR="success-alt"
-          echo "result_alt=${RESULT_VAR}" >> $GITHUB_OUTPUT
+      - name: Set AWS Profile
+        run: echo "profile_value=${{ vars.AWS_PROFILE }}" >> $GITHUB_OUTPUT
+        id: aws_profile
