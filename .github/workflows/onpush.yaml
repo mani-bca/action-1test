@@ -15,7 +15,7 @@ on:
   push:
     branches-ignore:
       - 'feature/**'
-      - 'bugfix/**'
+      - 'main/**'
       - 'releases/**'
 
 jobs:
