@@ -19,15 +19,9 @@ concurrency:
 
 jobs:
   call-reusable:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call reusable workflow
-        uses: ./.github/workflows/reusable.yml
-        with:
-          environment: ${{ github.event.inputs.environment || 'dev' }}
-        id: set_output
-    outputs:
-      result: ${{ steps.set_output.outputs.result }}
+    uses: ./.github/workflows/reusable.yml
+    with:
+      environment: ${{ github.event.inputs.environment || 'dev' }}
 
   consume-output:
     needs: call-reusable
