@@ -1,0 +1,125 @@
+Here’s a complete GitHub Actions setup using two workflows:
+
+reusable.yml: A reusable workflow using workflow_call that accepts inputs, sets an output, and prints secret/environment input values.
+
+main.yml: A main workflow that:
+
+Triggers on push, workflow_dispatch
+
+Calls the reusable workflow with inputs
+
+Uses concurrency, needs, and handles outputs from reusable workflow
+
+
+
+
+---
+
+.github/workflows/reusable.yml (Reusable Workflow)
+
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      run_tests:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.set_output.outputs.result }}
+    steps:
+      - name: Show input
+        run: echo "Workflow input is ${{ inputs.environment }}"
+        
+      - name: Show secret
+        run: echo "Secret value is ${{ secrets.AWS_ACCESS_KEYID }}"
+
+      - name: Set custom output (v1 style)
+        id: set_output
+        run: echo "result=success-from-reusable" >> $GITHUB_OUTPUT
+
+      - name: Set output (alternate v2 style)
+        id: alt_output
+        run: |
+          RESULT_VAR="success-alt"
+          echo "result_alt=${RESULT_VAR}" >> $GITHUB_OUTPUT
+
+
+---
+
+.github/workflows/main.yml (Main Workflow)
+
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - feature-1
+      - feature-2
+      - release04112025
+    branches-ignore:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        default: dev
+      run_tests:
+        description: 'Run tests?'
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  call-reusable:
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/reusable.yml
+    with:
+      environment: ${{ github.event.inputs.environment || 'dev' }}
+      run_tests: ${{ github.event.inputs.run_tests || true }}
+    secrets: inherit
+    outputs:
+      result: ${{ steps.set_output.outputs.result }}
+
+  consume-output:
+    needs: call-reusable
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output from reusable
+        run: echo "Reusable output was ${{ needs.call-reusable.outputs.result }}"
+
+
+---
+
+Highlights:
+
+Triggers on push to specific branches and ignores others.
+
+workflow_dispatch.inputs handled in main.yml.
+
+workflow_call.inputs used in reusable.yml.
+
+concurrency to cancel in-progress runs per ref.
+
+Two jobs, with needs dependency and runs-on.
+
+Secrets usage shown (secrets.AWS_ACCESS_KEYID).
+
+steps.set-output used in both v1 and v2 styles.
+
+
+Let me know if you want to see this implemented with a real public repo example or CI/CD pattern!
+
