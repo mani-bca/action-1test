@@ -14,7 +14,6 @@ jobs:
               uses: actions/github-script@v6
               with:
                     script: |
-                        const { context, github } = require('@actions/github');
                         const issueTitle = "Automated Issue Title";
                         const issueBody = "This issue was created automatically by a GitHub Actions workflow.";
                         
