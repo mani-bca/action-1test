@@ -1,0 +1,34 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      run_tests:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.set_output.outputs.result }}
+    steps:
+      - name: Show input
+        run: echo "Workflow input is ${{ inputs.environment }}"
+        
+      - name: Show secret
+        run: echo "Secret value is ${{ secrets.AWS_ACCESS_KEYID }}"
+
+      - name: Set custom output (v1 style)
+        id: set_output
+        run: echo "result=success-from-reusable" >> $GITHUB_OUTPUT
+
+      - name: Set output (alternate v2 style)
+        id: alt_output
+        run: |
+          RESULT_VAR="success-alt"
+          echo "result_alt=${RESULT_VAR}" >> $GITHUB_OUTPUT
