@@ -27,5 +27,8 @@ jobs:
     needs: call-reusable
     runs-on: ubuntu-latest
     steps:
-      - name: Output from reusable
-        run: echo "Reusable output was ${{ needs.call-reusable.outputs.result }}"
+      - name: Output all results from reusable
+        run: |
+          echo "Result output: ${{ needs.call-reusable.outputs.result }}"
+          echo "Profile value: ${{ needs.call-reusable.outputs.profile_value }}"
+          echo "All outputs context: ${{ toJSON(needs.call-reusable.outputs) }}"
