@@ -22,3 +22,26 @@ jobs:
             - name: echo the success message
               if: success() && github.event_name == 'workflow_dispatch'
               run: echo "Issue created successfully!"
+        
+    create-pull-request:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              
+            - name: Create a pull request
+              run: |
+                gh pr create --base main --head feature-branch --title "Automated PR Title" --body "This PR was created automatically by a GitHub Actions workflow."
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: Auto-merge the pull request
+              run: |
+                PR_NUMBER=$(gh pr list --head feature-branch --json number -q '.[0].number')
+                gh pr merge $PR_NUMBER --merge --admin
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: echo the success message
+              if: success() && github.event_name == 'workflow_dispatch'
+              run: echo "Pull request created and merged successfully!"
