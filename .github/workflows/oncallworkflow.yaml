@@ -1,0 +1,45 @@
+name: workflow on
+# on:
+#   schedule:
+#     - cron: '*/15 0 * * *'
+
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - .github/workflows/ci.yml
+
+on:
+  workflow_call:
+    inputs:
+      username:
+        description: 'A username passed from the caller workflow'
+        default: 'mani'
+        required: false
+        type: string
+    outputs:
+      workflow_output1:
+        description: "The first job output"
+        value: ${{ jobs.my_job.outputs.job_output1 }}
+      workflow_output2:
+        description: "The second job output"
+        value: ${{ jobs.my_job.outputs.job_output2 }}
+
+jobs:
+  print-username:
+    runs-on: ubuntu-latest
+    outputs:
+      job_output1: ${{ steps.set-output.outputs.output1 }}
+      job_output2: ${{ steps.set-output.outputs.output2 }}
+    
+    steps:
+      - name: Print the input name to STDOUT
+        run: echo The username is ${{ inputs.username }}
+      
+      - name: Set outputs
+        id: set-output
+        run: |
+          echo "output1=value1" >> $GITHUB_OUTPUT
+          echo "output2=value2" >> $GITHUB_OUTPUT
