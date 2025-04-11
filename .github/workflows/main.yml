@@ -1,11 +1,11 @@
 name: Main Workflow
 
 on:
-  push:
-    branches-ignore:
-      - feature-1
-      - feature-2
-      - release04112025
+  # push:
+  #   branches-ignore:
+  #     - feature-1
+  #     - feature-2
+  #     - release04112025
   workflow_dispatch:
     inputs:
       environment:

@@ -6,16 +6,20 @@ on:
       environment:
         required: true
         type: string
-      # run_tests:
-      #   required: false
-      #   type: boolean
-      #   default: true
+    outputs:
+      result:
+        description: "Result from the workflow"
+        value: ${{ jobs.build.outputs.result }}
+      profile_value:
+        description: "AWS Profile value"
+        value: ${{ jobs.build.outputs.profile_value }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
       result: ${{ steps.set_output.outputs.result }}
+      profile_value: ${{ steps.aws_profile.outputs.profile_value }}
     steps:
       - name: Show input
         run: echo "Workflow input is ${{ inputs.environment }}"
@@ -23,7 +27,7 @@ jobs:
       - name: Show secret
         run: echo "Secret value is ${{ secrets.AWS_ACCESS_KEYID }}"
 
-      - name: Set custom output (v1 style)
+      - name: Set custom output
         id: set_output
         run: echo "result=success-from-reusable" >> $GITHUB_OUTPUT
 
