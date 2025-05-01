@@ -1,29 +1,29 @@
-# action-1test
-
-modifed files
-✅ This configuration ensures that the workflow runs only when:
-
-A push occurs on branches other than those under feature/**
-
-The push doesn't involve only Markdown files (*.md)
+<img width="503" alt="{DCA83945-303B-401A-9496-D282623F9612}" src="https://github.com/user-attachments/assets/341fd94d-2176-4b98-b423-bf2d06ee0f22" />
 
 
+UC:1 - Setting Up ALB and Listener Rules for Different Request Paths
 
-These are global environment variables, available to all jobs and steps.
-They are accessed using the ${{ env.VARIABLE_NAME }} syntax inside steps.
+Review below diagram carefully for incoming requests that can be classified based on homepage(default), register, image. Configure ALB and Listener rules to route requests to the below paths. Each of the types described below needs to be served separately. Use a custom VPC and Subnets and ensure three EC2 instances running in one AZ each.
 
-- name: Echo GitHub Context Values
-  run: |
-    echo "SHA: ${{ github.sha }}"
-    echo "Ref: ${{ github.ref }}"
-    echo "Repository: ${{ github.repository }}"
-    echo "Actor: ${{ github.actor }}"
+We have used user_data (sample below) attribute with a script that installs and runs the nginx service. Further, each nginx is configured separately to serve separate paths:
 
-These values are pulled from GitHub's built-in github context and provide useful metadata about the workflow trigger.
+Instance A – responds to root path
 
-- name: Echo Environment Variables
-  run: |
-    echo "Environment value one: ${{ env.ENV_ONE }}"
-    echo "Environment value two: ${{ env.ENV_TWO }}"
+Instance B – responds to /images path
 
-This prints the values of environment variables defined at the workflow level.
+Instance C – responds to /register path
+
+
+Access the homepage for Instance A, ./images/ path for Instance B and ./register/ path for Instance C.
+
+Expected Outcome:
+
+Ensure the traffic is routed correctly to the appropriate EC2 instance based on the listener rules.
+
+Verify that the EC2 instances are serving the requests appropriately and that the ALB correctly distributes the traffic.
+
+Homepage Requests: Requests to the root URL (/) are routed to the EC2 instance in AZ1 handling the homepage.
+
+Register Requests: Requests to /register are routed to the EC2 instance in AZ2 handling the registration page.
+
+Image Requests: Requests to /image are routed to the EC2 instance in AZ3 serving image-related content.
