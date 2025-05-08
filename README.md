@@ -1,29 +1,25 @@
-<img width="503" alt="{DCA83945-303B-401A-9496-D282623F9612}" src="https://github.com/user-attachments/assets/341fd94d-2176-4b98-b423-bf2d06ee0f22" />
+OIDC - FAQ
 
+Q. What is an OIDC identity provider in AWS IAM?
+Q. How do you create an OIDC identity provider in AWS IAM?
+Q. What are the prerequisites for creating an OIDC identity provider in AWS IAM?
+Q.How do you manage an OIDC identity provider using AWS CLI?
+Q. What is the role of IAM policies in OIDC federation?
+Q. Can you provide a Terraform resource block example for creating an OIDC identity provider?
+Q. What are the security considerations when using OIDC identity providers in AWS?
+Q. How do you troubleshoot common issues with OIDC federation in AWS?
+Q. How do you update an existing OIDC identity provider in AWS IAM?
 
-UC:1 - Setting Up ALB and Listener Rules for Different Request Paths
+AWS cloudwatch - FAQ
 
-Review below diagram carefully for incoming requests that can be classified based on homepage(default), register, image. Configure ALB and Listener rules to route requests to the below paths. Each of the types described below needs to be served separately. Use a custom VPC and Subnets and ensure three EC2 instances running in one AZ each.
-
-We have used user_data (sample below) attribute with a script that installs and runs the nginx service. Further, each nginx is configured separately to serve separate paths:
-
-Instance A – responds to root path
-
-Instance B – responds to /images path
-
-Instance C – responds to /register path
-
-
-Access the homepage for Instance A, ./images/ path for Instance B and ./register/ path for Instance C.
-
-Expected Outcome:
-
-Ensure the traffic is routed correctly to the appropriate EC2 instance based on the listener rules.
-
-Verify that the EC2 instances are serving the requests appropriately and that the ALB correctly distributes the traffic.
-
-Homepage Requests: Requests to the root URL (/) are routed to the EC2 instance in AZ1 handling the homepage.
-
-Register Requests: Requests to /register are routed to the EC2 instance in AZ2 handling the registration page.
-
-Image Requests: Requests to /image are routed to the EC2 instance in AZ3 serving image-related content.
+Q. What is Amazon CloudWatch?
+Q. What can I use to access CloudWatch?
+Q. What is Amazon CloudWatch Logs?
+Q. What access management policies can I implement for CloudWatch?
+Q. How does Amazon CloudWatch collect data?
+Q. What are CloudWatch Alarms?
+Q. Can I use CloudWatch to monitor my on-premises resources?
+Q. What is CloudWatch Events?
+Q. How long does CloudWatch retain data?
+Q. What are best practices for using AWS CloudWatch effectively?
+Q. What are key metrics and make list for monitoring ECS, EKS, Lambda, and ALB in AWS CloudWatch like container metrics etc.
